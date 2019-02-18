@@ -931,6 +931,17 @@ class Caffe2Backend(Backend):
                     success = False
                     print('ONNX FATAL:', e)
                     continue
+
+                if c2ops.ops[0].type == 'Mul':
+                    print(c2ops.ops[0].type)
+                    broadcast = c2ops.ops[0].arg.add()
+                    broadcast.name = "broadcast"
+                    broadcast.i = 1
+
+                    print()
+                    print(c2ops.ops[0])
+                    print('_________________________')
+
                 (init_net if include_initializers else net).op.extend(c2ops.init_ops)
                 net.op.extend(c2ops.ops)
                 net.external_input.extend(c2ops.interface_blobs)
